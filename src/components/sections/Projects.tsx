@@ -1,21 +1,40 @@
 "use client";
 
 import * as React from "react";
-import { portfolioData } from "@/data/portfolio";
+import { portfolioData, ProjectItem } from "@/data/portfolio";
 import {
   FolderGit2,
   ExternalLink,
   CheckCircle2,
   Clock,
   Sparkles,
+  Terminal,
+  Layers,
+  ArrowRight,
+  Building2,
 } from "lucide-react";
 import { GithubIcon } from "@/components/icons/BrandIcons";
 
-export function Projects() {
-  const { projects } = portfolioData;
-  const [selectedFilter, setSelectedFilter] = React.useState<string>("All");
+interface ProjectsProps {
+  onSelectProject?: (project: ProjectItem) => void;
+  onOpenSandbox?: () => void;
+}
 
-  const categories = [
+export function Projects({ onSelectProject, onOpenSandbox }: ProjectsProps) {
+  const { projects } = portfolioData;
+
+  const [selectedCompany, setSelectedCompany] = React.useState<string>("All");
+  const [selectedCategory, setSelectedCategory] = React.useState<string>("All");
+
+  const companyFilters = [
+    { label: "All Organizations", value: "All" },
+    { label: "Innodata", value: "Innodata" },
+    { label: "Vodafone Idea", value: "Vodafone Idea" },
+    { label: "Improve Business Solutions", value: "Improve Business Solutions" },
+    { label: "GISMA University", value: "GISMA University of Applied Sciences" },
+  ];
+
+  const categoryFilters = [
     "All",
     "Business Intelligence",
     "AI & LLM",
@@ -23,10 +42,23 @@ export function Projects() {
     "Data Science",
   ];
 
-  const filteredProjects =
-    selectedFilter === "All"
-      ? projects
-      : projects.filter((p) => p.category === selectedFilter);
+  const filteredProjects = projects.filter((project) => {
+    const matchesCompany =
+      selectedCompany === "All" ||
+      project.company.toLowerCase().includes(selectedCompany.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || project.category === selectedCategory;
+    return matchesCompany && matchesCategory;
+  });
+
+  const handleOpenSandbox = () => {
+    if (onOpenSandbox) {
+      onOpenSandbox();
+    } else {
+      const el = document.getElementById("sandbox");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section
@@ -41,53 +73,87 @@ export function Projects() {
             Selected Case Studies
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Featured Projects
+            Featured Projects & Case Studies
           </h2>
           <p className="mt-3 text-base text-slate-600 dark:text-slate-400">
-            Real implementations across Power BI dashboards, AI code evaluation benchmarks, and master&apos;s data science research.
+            Real implementations across Power BI dashboards, automated MIS pipelines, and AI evaluation quality benchmarks.
           </p>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedFilter(cat)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                selectedFilter === cat
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Dual-Tier Filtering (Mehmet Sezer Pattern) */}
+        <div className="max-w-4xl mx-auto mb-12 space-y-3.5">
+          {/* Tier 1: Organization Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
+              <Building2 className="w-3 h-3" />
+              Org:
+            </span>
+            {companyFilters.map((org) => (
+              <button
+                key={org.label}
+                onClick={() => setSelectedCompany(org.value)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  selectedCompany === org.value
+                    ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold shadow-xs"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800"
+                }`}
+              >
+                {org.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tier 2: Domain / Category Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
+              <Layers className="w-3 h-3" />
+              Domain:
+            </span>
+            {categoryFilters.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  selectedCategory === cat
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {filteredProjects.map((project) => (
             <div
-              key={project.title}
-              className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md hover:border-blue-500/30 transition-all flex flex-col justify-between group"
+              key={project.id || project.title}
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md hover:border-blue-500/40 transition-all flex flex-col justify-between group"
             >
               <div>
-                {/* Header: Category & Clear Status Badge */}
+                {/* Header: Category, Company & Status Badge */}
                 <div className="flex items-center justify-between gap-3 mb-4">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                    {project.category}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                      {project.category}
+                    </span>
+                    <span className="text-slate-300 dark:text-slate-700">·</span>
+                    <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                      {project.company}
+                    </span>
+                  </div>
 
                   {project.status === "Completed" ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                       <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                       Completed
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                       <Clock className="w-3 h-3 text-amber-500" />
-                      In Progress (GISMA MSc)
+                      In Progress (MSc)
                     </span>
                   )}
                 </div>
@@ -97,18 +163,27 @@ export function Projects() {
                 </h3>
 
                 <p className="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {project.description}
+                  {project.shortDescription || project.description}
                 </p>
 
-                {/* Key Highlight / Impact */}
-                <div className="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 flex items-start gap-2">
+                {/* Primary Impact Metric Pill */}
+                {project.impactMetric && (
+                  <div className="mt-3 px-3 py-1.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 text-[11px] font-medium text-blue-700 dark:text-blue-300">
+                    <span className="font-bold">Impact: </span>
+                    {project.impactMetric}
+                  </div>
+                )}
+
+                {/* Key Highlight */}
+                <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 flex items-start gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-blue-500 mt-0.5 shrink-0" />
                   <span>{project.highlights}</span>
                 </div>
               </div>
 
-              {/* Footer: Tech tags and GitHub Link */}
-              <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {/* Footer: Tech tags and Action Buttons */}
+              <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-4">
+                {/* Tech Pills */}
                 <div className="flex flex-wrap gap-1.5">
                   {project.tools.map((tool) => (
                     <span
@@ -120,18 +195,43 @@ export function Projects() {
                   ))}
                 </div>
 
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors shrink-0"
-                  >
-                    <GithubIcon className="w-3.5 h-3.5" />
-                    <span>View Code</span>
-                    <ExternalLink className="w-3 h-3 text-slate-400" />
-                  </a>
-                )}
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                  <div className="flex items-center gap-2">
+                    {onSelectProject && (
+                      <button
+                        type="button"
+                        onClick={() => onSelectProject(project)}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 rounded-lg transition-colors"
+                      >
+                        Case Study
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={handleOpenSandbox}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <Terminal className="w-3 h-3 text-blue-500" />
+                      <span>SQL</span>
+                    </button>
+                  </div>
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <GithubIcon className="w-3.5 h-3.5" />
+                      <span>Code</span>
+                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}

@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test:supabase": "node scripts/test-supabase.mjs",
+    "test:sql": "node scripts/test-sql-engine.mjs",
+    "test:security": "node scripts/test-contact-security.mjs",
     "verify:table": "node scripts/verify-contact-table.mjs"
   },
   "dependencies": {

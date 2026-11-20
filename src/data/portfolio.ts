@@ -1,3 +1,22 @@
+export interface CareerPathItem {
+  id: string;
+  year: string;
+  company: string;
+  role: string;
+  shortRole: string;
+  badge: string;
+  location: string;
+  period: string;
+  isCurrent?: boolean;
+}
+
+export interface ImpactKpi {
+  value: string;
+  badge: string;
+  label: string;
+  description: string;
+}
+
 export interface WorkExperience {
   role: string;
   company: string;
@@ -6,6 +25,7 @@ export interface WorkExperience {
   responsibilities: string[];
   skills: string[];
   badge?: string;
+  outcomes?: string[];
 }
 
 export interface EducationItem {
@@ -18,13 +38,21 @@ export interface EducationItem {
 }
 
 export interface ProjectItem {
+  id: string;
   title: string;
-  status: "Completed" | "In Progress";
+  company: string;
   category: "Business Intelligence" | "AI & LLM" | "Data Analytics" | "Data Science";
-  description: string;
+  status: "Completed" | "In Progress";
+  period: string;
+  shortDescription: string;
+  description?: string;
+  problemStatement: string;
+  architecture: string;
+  deliverables: string[];
   tools: string[];
   highlights: string;
-  githubUrl?: string;
+  impactMetric: string;
+  githubUrl: string;
 }
 
 export interface SkillCategory {
@@ -39,6 +67,14 @@ export interface LanguageItem {
   note?: string;
 }
 
+export interface SqlSandboxQuery {
+  id: string;
+  filename: string;
+  title: string;
+  description: string;
+  sql: string;
+}
+
 export const portfolioData = {
   personal: {
     name: "Gunti Upendra",
@@ -47,27 +83,115 @@ export const portfolioData = {
     email: "upendragunti03@gmail.com",
     linkedin: "https://linkedin.com/in/gunti-upendra-9a86a322a",
     github: "https://github.com/upendragunti098-lab",
-    availability: "Available for Werkstudent (up to 20h/week during semester) or Internship opportunities in Berlin & Remote (Germany).",
-    hasCvFile: false, // Set to true only when a verified CV PDF is placed in public/
+    availability: "Open to Werkstudent (up to 20h/week during semester) & Internship Roles · Berlin & Hybrid/Remote",
+    visaStatus: "Eligible for student employment up to 20 hours/week during semester (full-time during lecture-free periods).",
+    hasCvFile: false,
     summary:
-      "MSc student in Data Science, AI and Digital Business at GISMA University of Applied Sciences, Germany, with 3+ years of experience in data analysis, MIS reporting, Power BI dashboards, and AI/LLM evaluation. Proven background in Python code review, LLM output ranking, quality assurance, and team leadership—including coordinating a 40-person evaluation team. Seeking Werkstudent and internship opportunities in Data Analytics, Business Intelligence, AI, and Data Operations.",
+      "MSc student in Data Science, AI and Digital Business at GISMA University of Applied Sciences, Germany, with 3+ years of professional experience across Data Analytics, MIS Reporting, Power BI Dashboards, and AI/LLM evaluation. Proven track record in Python code review, model output ranking, and cross-functional leadership—coordinating a 40-member evaluation team. Seeking Werkstudent and internship opportunities in Data Analytics, Business Intelligence, AI, and Data Operations in Germany.",
   },
+
+  careerPath: [
+    {
+      id: "exp-ibs",
+      year: "2023 – 2024",
+      company: "Improve Business Solutions",
+      role: "MIS Analyst",
+      shortRole: "MIS Analyst",
+      badge: "IBS",
+      location: "India",
+      period: "06/2023 – 09/2024",
+    },
+    {
+      id: "exp-vi",
+      year: "2024 – 2025",
+      company: "Vodafone Idea",
+      role: "Data Analyst / MIS Executive",
+      shortRole: "Data Analyst / MIS",
+      badge: "VI",
+      location: "India",
+      period: "10/2024 – 03/2025",
+    },
+    {
+      id: "exp-innodata-freelance",
+      year: "2025 – 2026",
+      company: "Innodata",
+      role: "Freelance LLM Evaluator",
+      shortRole: "LLM Evaluator",
+      badge: "INNO",
+      location: "Remote",
+      period: "03/2025 – 03/2026",
+    },
+    {
+      id: "exp-innodata-lead",
+      year: "2026",
+      company: "Innodata",
+      role: "Senior Associate – Python Q&A Reviewer (AI/LLM)",
+      shortRole: "Sr. Associate / Team Lead",
+      badge: "INNO",
+      location: "Remote, India",
+      period: "03/2026 – 05/2026",
+    },
+    {
+      id: "edu-gisma",
+      year: "2026 – 2028",
+      company: "GISMA University",
+      role: "MSc Data Science, AI & Digital Business",
+      shortRole: "MSc Candidate",
+      badge: "GISMA",
+      location: "Berlin / Potsdam, Germany",
+      period: "04/2026 – 04/2028",
+      isCurrent: true,
+    },
+  ] as CareerPathItem[],
+
+  impactKpis: [
+    {
+      value: "3+ Yrs",
+      badge: "3 Organizations",
+      label: "Career Experience",
+      description: "Data Analytics, MIS Reporting, and AI/LLM evaluation in production environments.",
+    },
+    {
+      value: "40+",
+      badge: "Team Coordination",
+      label: "Evaluators Led",
+      description: "Led and coordinated a 40-member evaluation team in Python QA and AI benchmarking.",
+    },
+    {
+      value: "50+",
+      badge: "BI & Reporting",
+      label: "Dashboards & Reports",
+      description: "Automated recurring daily, weekly, and monthly operational KPI reporting suites.",
+    },
+    {
+      value: "84.5%",
+      badge: "Graduated with Distinction",
+      label: "BSc Computer Science",
+      description: "Strong quantitative and statistical foundations from St. Francis Xavier's.",
+    },
+    {
+      value: "GISMA",
+      badge: "Berlin / Potsdam",
+      label: "MSc Data Science & AI",
+      description: "Advanced Master's studies combining applied machine learning and digital business.",
+    },
+  ] as ImpactKpi[],
 
   skills: [
     {
-      category: "Programming & Data",
+      category: "Programming & Data Foundations",
       icon: "Code2",
-      skills: ["Python", "SQL", "Advanced Excel", "Google Sheets"],
+      skills: ["Python", "SQL (PostgreSQL, MySQL)", "Advanced Excel", "Power Query", "Google Sheets"],
     },
     {
       category: "Business Intelligence & Analytics",
       icon: "BarChart3",
       skills: [
         "Power BI",
+        "DAX & Data Modeling",
         "Executive Dashboards",
-        "KPI Tracking",
-        "Report Automation",
-        "ETL & Data Cleaning",
+        "KPI Architecture",
+        "ETL & Data Transformation",
         "Trend Analysis & Forecasting",
       ],
     },
@@ -75,29 +199,38 @@ export const portfolioData = {
       category: "AI & LLM Evaluation",
       icon: "Brain",
       skills: [
-        "LLM Evaluation",
-        "Prompt Evaluation",
-        "Response Ranking",
-        "RLHF-style Feedback",
+        "Python Code Review & Debugging",
+        "LLM Output Ranking",
+        "Prompt Evaluation & Benchmarking",
+        "RLHF-style Alignment",
         "Data Annotation",
-        "AI Code Review",
         "QA & Edge-Case Validation",
       ],
     },
     {
-      category: "Business Systems",
+      category: "Business Systems & Operations",
       icon: "Layers",
-      skills: ["SAP MM (PR, PO, GRN)", "Procurement Workflows", "Operational Tracking"],
+      skills: ["SAP MM (PR, PO, GRN)", "Procurement Workflows", "Inventory & Store Reconciliation"],
     },
     {
       category: "Leadership & Collaboration",
       icon: "Users",
       skills: [
-        "Team Leadership (40-person team)",
+        "Team Leadership (40-Member Team)",
         "Technical Onboarding & Training",
-        "Interview Support",
-        "Task Allocation & Progress Tracking",
-        "Stakeholder Management",
+        "Task Allocation & Milestone Tracking",
+        "Interview Panel Support",
+        "Cross-functional Stakeholder Reporting",
+      ],
+    },
+    {
+      category: "AI-Augmented Analytics Workflow",
+      icon: "Cpu",
+      skills: [
+        "Claude Code & AI Assisted Analysis",
+        "Prompt Optimization",
+        "Automated Data QA",
+        "Git & GitHub Workflows",
       ],
     },
   ] as SkillCategory[],
@@ -108,7 +241,7 @@ export const portfolioData = {
       company: "Innodata",
       period: "March 2026 – May 2026",
       location: "Remote, India",
-      badge: "Team Lead",
+      badge: "Team Lead (40 Members)",
       responsibilities: [
         "Led evaluation of Python-based Q&A datasets to improve LLM accuracy, reasoning, and code quality.",
         "Conducted thorough Python code reviews, debugging, and edge-case validation on AI-generated solutions.",
@@ -119,24 +252,33 @@ export const portfolioData = {
         "Performed prompt evaluation, response ranking, and quality assurance benchmarking.",
       ],
       skills: ["Python", "LLM Evaluation", "Code Review", "Prompt Engineering", "Team Leadership (40)", "QA Benchmarking"],
+      outcomes: [
+        "Standardized Python evaluation rubrics across 40 team members, elevating rubric adherence and data delivery throughput.",
+        "Eliminated syntactic and algorithmic hallucinations in AI-generated code snippets through structured validation pipelines.",
+      ],
     },
     {
       role: "Freelance LLM Evaluator / Aligner & Outliner",
       company: "Innodata",
       period: "March 2025 – March 2026",
       location: "Remote",
+      badge: "AI Evaluation Specialist",
       responsibilities: [
         "Evaluated AI-generated responses across diverse domains for factual accuracy, relevance, and logical consistency.",
         "Ranked multi-turn model outputs systematically according to detailed alignment rubrics and safety guidelines.",
         "Performed comprehensive data annotation and validation to support LLM reinforcement learning pipelines.",
       ],
       skills: ["LLM Evaluation", "Model Output Ranking", "Data Annotation", "RLHF Feedback", "Quality Assurance"],
+      outcomes: [
+        "Delivered structured evaluation rubrics and comparative scoring across thousands of model responses.",
+      ],
     },
     {
       role: "Data Analyst / MIS Executive",
       company: "Vodafone Idea (via Quess Corp)",
       period: "October 2024 – March 2025",
       location: "India",
+      badge: "Retail Analytics & MIS",
       responsibilities: [
         "Designed and maintained Power BI and Excel dashboards for regional operational KPI tracking.",
         "Automated recurring daily, weekly, and monthly MIS reports using Excel formulas, Power Query, and SQL.",
@@ -146,20 +288,29 @@ export const portfolioData = {
         "Presented analytical summaries and performance insights to regional stakeholders and senior leadership.",
       ],
       skills: ["Power BI", "SQL", "Advanced Excel", "SAP MM", "Google Sheets", "MIS Reporting", "Operational Analytics"],
+      outcomes: [
+        "Automated daily retail performance reporting cadence across store networks, eliminating repetitive manual consolidation.",
+        "Unified procurement logs (PR, PO, GRN) from SAP MM with store inventory trackers, resolving inventory variances.",
+      ],
     },
     {
       role: "MIS Analyst",
       company: "Improve Business Solutions",
       period: "June 2023 – September 2024",
       location: "India",
+      badge: "Operations & BI",
       responsibilities: [
-        "Managed end-to-end data collection, cleansing, transformation, and reconciliation from multiple sources.",
+        "Managed end-to-end data collection, cleansing, transformation, and reconciliation from multiple operational sources.",
         "Engineered robust Power BI dashboards and automated Excel reporting systems for operational transparency.",
         "Conducted trend analysis, volume forecasting, and KPI monitoring to support strategic decisions.",
         "Executed strict data quality assurance and audit validation across business reporting streams.",
         "Collaborated with cross-functional stakeholders and delivered internal training sessions to team members.",
       ],
       skills: ["Power BI", "MIS Reporting", "ETL & Data Cleaning", "Trend Analysis", "Forecasting", "Quality Assurance"],
+      outcomes: [
+        "Built automated reporting templates that standardized KPI tracking across departments.",
+        "Trained junior analysts and operational staff on dashboard navigation and self-service reporting.",
+      ],
     },
   ] as WorkExperience[],
 
@@ -170,8 +321,8 @@ export const portfolioData = {
       location: "Potsdam / Berlin, Germany",
       period: "April 2026 – April 2028 (Expected)",
       details: [
-        "Focus on Data Science, Applied Artificial Intelligence, Digital Business Models, and Advanced Analytics.",
-        "Based in Berlin/Potsdam area; available for Werkstudent positions up to 20h/week during semesters.",
+        "Specialization in Applied Artificial Intelligence, Machine Learning, Data Engineering, and Digital Business Transformation.",
+        "Located in the Berlin/Potsdam metropolitan area; eligible for Werkstudent employment up to 20h/week during semesters.",
       ],
     },
     {
@@ -179,9 +330,9 @@ export const portfolioData = {
       institution: "St. Francis Xavier's Degree College",
       location: "Hyderabad, India",
       period: "Completed",
-      grade: "84.5%",
+      grade: "84.5% (Graduated with Distinction)",
       details: [
-        "Core coursework in Computer Science, Mathematical Statistics, Database Management, and Quantitative Analysis.",
+        "Rigorous quantitative curriculum covering Mathematical Statistics, Probability Theory, Relational Databases, and Computer Science fundamentals.",
       ],
     },
   ] as EducationItem[],
@@ -190,12 +341,12 @@ export const portfolioData = {
     {
       language: "English",
       level: "B2 – Professional Working Proficiency",
-      note: "Fluent in professional, technical, and academic environments.",
+      note: "Fluent communication in international, corporate, and academic settings.",
     },
     {
       language: "German",
       level: "A1 – A2 (Currently Learning)",
-      note: "Actively studying German for daily life and workplace integration in Germany.",
+      note: "Actively studying German in Berlin for daily workplace and cultural integration.",
     },
     {
       language: "Telugu",
@@ -211,48 +362,292 @@ export const portfolioData = {
 
   projects: [
     {
-      title: "Multi-Store Retail KPI & Performance Suite",
-      status: "Completed",
+      id: "retail-demand-intelligence",
+      title: "Retail Demand Intelligence & Inventory Optimization",
+      company: "Vodafone Idea",
       category: "Business Intelligence",
+      status: "Completed",
+      period: "2024 – 2025",
+      shortDescription:
+        "Interactive Power BI dashboard suite tracking multi-store retail turnover, inventory movements, and regional sales KPIs.",
       description:
-        "Comprehensive Power BI dashboard tracking store-level revenue, inventory movement, regional performance, and operational KPIs across regional retail networks.",
-      tools: ["Power BI", "DAX", "SQL", "Excel", "Data Modeling"],
-      highlights:
-        "Automated daily and weekly reporting cadence, replacing manual spreadsheets with unified interactive dashboards.",
+        "Interactive Power BI dashboard suite tracking multi-store retail turnover, inventory movements, and regional sales KPIs.",
+      problemStatement:
+        "Regional retail stores in Andhra Pradesh and Telangana operated on disparate spreadsheets, resulting in reporting delays, stockout risks, and manual overhead for store managers.",
+      architecture:
+        "Engineered automated ETL workflows combining store-level POS receipts, SQL transactional logs, and SAP MM procurement records (PR/PO/GRN) into normalized Star-Schema Power BI data models.",
+      deliverables: [
+        "Executive Power BI dashboard with drill-down views by store, district, and product SKU.",
+        "Automated daily refresh pipeline eliminating manual spreadsheet compilation.",
+        "Automated discrepancy alerts comparing warehouse goods receipt notes (GRN) against store inventory.",
+      ],
+      tools: ["Power BI", "DAX", "SQL", "SAP MM", "Advanced Excel"],
+      highlights: "Automated daily/weekly reporting cadence across regional stores, cutting manual compilation time.",
+      impactMetric: "Multi-Store Retail Network · Regional KPI Automation",
       githubUrl: "https://github.com/upendragunti098-lab",
     },
     {
-      title: "Python-Based LLM Code Evaluation Benchmark",
-      status: "Completed",
+      id: "llm-evaluation-benchmark",
+      title: "LLM Evaluation & Data Quality Analytics",
+      company: "Innodata",
       category: "AI & LLM",
-      description:
-        "Structured validation pipeline for benchmarking AI-generated Python code, testing algorithmic edge cases, syntax validation, reasoning depth, and structured rubric scoring.",
-      tools: ["Python", "LLM Evaluation", "Code Review", "Prompt Engineering", "QA Benchmarks"],
-      highlights:
-        "Developed structured validation checklists and criteria for ranking model outputs by correctness and maintainability.",
-      githubUrl: "https://github.com/upendragunti098-lab",
-    },
-    {
-      title: "Automated MIS SQL & Procurement Pipeline",
       status: "Completed",
-      category: "Data Analytics",
+      period: "2025 – 2026",
+      shortDescription:
+        "Systematic code evaluation and quality benchmarking pipeline for AI-generated Python scripts, prompt ranking, and debugging.",
       description:
-        "Automated ETL and reporting workflow aggregating store-level operational metrics and procurement records (PR, PO, GRN) from SAP MM into actionable management summaries.",
-      tools: ["SQL", "SAP MM", "Advanced Excel", "Power Query", "Google Sheets"],
-      highlights:
-        "Streamlined operational reconciliation and eliminated data discrepancies between warehouse logs and finance trackers.",
+        "Systematic code evaluation and quality benchmarking pipeline for AI-generated Python scripts, prompt ranking, and debugging.",
+      problemStatement:
+        "Large language models frequently generated code with subtle logic bugs, deprecated library syntax, or unhandled edge cases, requiring rigorous human-in-the-loop validation.",
+      architecture:
+        "Designed structured validation rubrics covering algorithmic complexity, test-case pass rates, syntax validity, and alignment with prompt instructions. Implemented scoring criteria across a distributed team.",
+      deliverables: [
+        "Standardized Python code review checklist and rubrics adopted across 40 evaluators.",
+        "Bulk dataset validation workflows verifying thousands of multi-turn code responses.",
+        "Onboarding curriculum and calibration tests for new evaluation associates.",
+      ],
+      tools: ["Python", "LLM Evaluation", "Code Review", "Prompt Engineering", "QA Benchmarking"],
+      highlights: "Coordinated a 40-member team ensuring high rubric adherence and code correctness.",
+      impactMetric: "40-Member Evaluator Team · LLM Code Quality",
       githubUrl: "https://github.com/upendragunti098-lab",
     },
     {
-      title: "Customer Churn Prediction & Retention Analytics",
-      status: "In Progress",
-      category: "Data Science",
+      id: "supply-chain-logistics-mis",
+      title: "Supply Chain & Logistics Operational MIS",
+      company: "Improve Business Solutions",
+      category: "Data Analytics",
+      status: "Completed",
+      period: "2023 – 2024",
+      shortDescription:
+        "Operational MIS analytics pipeline automating data collection, trend forecasting, and KPI monitoring.",
       description:
-        "Machine learning classification model exploring customer retention drivers in retail/telecom datasets, incorporating feature engineering, model interpretability, and business impact estimation.",
+        "Operational MIS analytics pipeline automating data collection, trend forecasting, and KPI monitoring.",
+      problemStatement:
+        "Operational reporting across logistics and business services suffered from data fragmentation, version conflicts in spreadsheets, and lack of historical trend analysis.",
+      architecture:
+        "Consolidated relational transaction data using SQL and Power Query, built normalized reporting views, and deployed automated Power BI dashboards with historical trend models.",
+      deliverables: [
+        "Automated monthly operational performance reports distributed to management.",
+        "Volume forecasting model tracking seasonal demand fluctuations.",
+        "Data quality audit checks verifying transactional integrity before dashboard publishing.",
+      ],
+      tools: ["SQL", "Power BI", "Advanced Excel", "Power Query", "Data Cleaning"],
+      highlights: "Automated end-to-end data pipelines and established consistent operational reporting across departments.",
+      impactMetric: "Automated Data Pipeline · Operational MIS",
+      githubUrl: "https://github.com/upendragunti098-lab",
+    },
+    {
+      id: "customer-churn-analytics",
+      title: "Customer Churn & Retention Analytics",
+      company: "GISMA University of Applied Sciences",
+      category: "Data Science",
+      status: "In Progress",
+      period: "2026 – Present",
+      shortDescription:
+        "Applied machine learning classification model investigating telecom and retail customer retention drivers.",
+      description:
+        "Applied machine learning classification model investigating telecom and retail customer retention drivers.",
+      problemStatement:
+        "Identifying early behavioral indicators of customer churn in subscription businesses to inform data-driven retention interventions.",
+      architecture:
+        "Developing end-to-end Python data science pipeline using Pandas, Scikit-Learn, and Seaborn for exploratory data analysis, feature engineering, classification modeling (Random Forest, Logistic Regression), and ROC-AUC evaluation.",
+      deliverables: [
+        "Exploratory data analysis identifying high-risk customer segments.",
+        "Feature importance ranking identifying top drivers of customer attrition.",
+        "Coursework research report benchmarking predictive accuracy and interpretability.",
+      ],
       tools: ["Python", "Scikit-Learn", "Pandas", "Statistical Modeling", "Jupyter"],
-      highlights:
-        "GISMA MSc coursework project: currently benchmarking classification algorithms and ROC-AUC performance against baseline models.",
+      highlights: "GISMA MSc research project currently benchmarking classification accuracy and feature importance.",
+      impactMetric: "GISMA MSc Research · Predictive Modeling",
       githubUrl: "https://github.com/upendragunti098-lab",
     },
   ] as ProjectItem[],
+
+  // --------------------------------------------------------------------------
+  // Dedicated Read-Only Dataset for the Interactive SQL Sandbox
+  // --------------------------------------------------------------------------
+  sqlSandboxData: {
+    tables: {
+      upendra_career_impact: [
+        {
+          company: "Innodata",
+          role: "Senior Associate – Python Q&A Reviewer (AI/LLM)",
+          location: "Remote, India",
+          period: "03/2026 – 05/2026",
+          team_size: 40,
+          primary_tool: "Python, LLM Evaluation",
+          impact_metric: "Coordinated 40 evaluators, code review QA",
+          key_outcome: "Standardized evaluation rubrics, code correctness verification",
+        },
+        {
+          company: "Innodata",
+          role: "Freelance LLM Evaluator / Aligner",
+          location: "Remote",
+          period: "03/2025 – 03/2026",
+          team_size: 1,
+          primary_tool: "LLM Evaluation, Prompt QA",
+          impact_metric: "Multi-turn model ranking, RLHF rubrics",
+          key_outcome: "Evaluated AI responses for factual accuracy and safety",
+        },
+        {
+          company: "Vodafone Idea",
+          role: "Data Analyst / MIS Executive",
+          location: "India",
+          period: "10/2024 – 03/2025",
+          team_size: 12,
+          primary_tool: "Power BI, SQL, SAP MM",
+          impact_metric: "Multi-store retail network KPI tracking",
+          key_outcome: "Automated daily reporting cadence, reconciled SAP MM PR/PO/GRN",
+        },
+        {
+          company: "Improve Business Solutions",
+          role: "MIS Analyst",
+          location: "India",
+          period: "06/2023 – 09/2024",
+          team_size: 8,
+          primary_tool: "Power BI, SQL, Excel",
+          impact_metric: "Operational reporting automation",
+          key_outcome: "Consolidated ETL pipelines, historical trend forecasting",
+        },
+      ],
+
+      upendra_technical_skills: [
+        {
+          category: "Programming & Data",
+          skill_name: "Python",
+          proficiency_level: "Advanced",
+          experience_years: "3+",
+          verified_context: "AI code review, debugging, data science modeling",
+        },
+        {
+          category: "Programming & Data",
+          skill_name: "SQL (PostgreSQL, MySQL)",
+          proficiency_level: "Advanced",
+          experience_years: "3+",
+          verified_context: "Query optimization, ETL, relational schemas",
+        },
+        {
+          category: "Programming & Data",
+          skill_name: "Advanced Excel & Power Query",
+          proficiency_level: "Expert",
+          experience_years: "3+",
+          verified_context: "Automated MIS models, complex lookups, financial reconciliation",
+        },
+        {
+          category: "Business Intelligence",
+          skill_name: "Power BI & DAX",
+          proficiency_level: "Advanced",
+          experience_years: "3+",
+          verified_context: "Enterprise executive dashboards, multi-store retail KPIs",
+        },
+        {
+          category: "AI & LLM Evaluation",
+          skill_name: "LLM Output Ranking & Prompt QA",
+          proficiency_level: "Expert",
+          experience_years: "2+",
+          verified_context: "Innodata AI data evaluation, rubric design, team leadership",
+        },
+        {
+          category: "Business Systems",
+          skill_name: "SAP MM (PR, PO, GRN)",
+          proficiency_level: "Intermediate",
+          experience_years: "1+",
+          verified_context: "Procurement records tracking at Vodafone Idea",
+        },
+        {
+          category: "Leadership & Collaboration",
+          skill_name: "Team Leadership & Coordination",
+          proficiency_level: "Proven",
+          experience_years: "1+",
+          verified_context: "Coordinated a distributed team of 40 evaluators at Innodata",
+        },
+      ],
+
+      upendra_projects: [
+        {
+          id: "retail-demand-intelligence",
+          title: "Retail Demand Intelligence & Inventory Optimization",
+          company: "Vodafone Idea",
+          domain: "Business Intelligence",
+          status: "Completed",
+          primary_stack: "Power BI, DAX, SQL, SAP MM",
+          impact: "Automated daily multi-store operational reports",
+        },
+        {
+          id: "llm-evaluation-benchmark",
+          title: "LLM Evaluation & Data Quality Analytics",
+          company: "Innodata",
+          domain: "AI & LLM Evaluation",
+          status: "Completed",
+          primary_stack: "Python, LLM Evaluation, Code Review",
+          impact: "Led 40-person team in Python code QA and prompt scoring",
+        },
+        {
+          id: "supply-chain-logistics-mis",
+          title: "Supply Chain & Logistics Operational MIS",
+          company: "Improve Business Solutions",
+          domain: "Data Analytics",
+          status: "Completed",
+          primary_stack: "SQL, Power BI, Advanced Excel",
+          impact: "Automated ETL reporting pipeline & trend forecasting",
+        },
+        {
+          id: "customer-churn-analytics",
+          title: "Customer Churn & Retention Analytics",
+          company: "GISMA University",
+          domain: "Data Science",
+          status: "In Progress",
+          primary_stack: "Python, Scikit-Learn, Pandas",
+          impact: "MSc predictive modeling on customer retention drivers",
+        },
+      ],
+    },
+
+    prebuiltQueries: [
+      {
+        id: "query-1",
+        filename: "query_1.sql",
+        title: "Career Impact & Team Leadership by Organization",
+        description: "Summarizes organizations, roles, team sizes, and measurable outcomes.",
+        sql: `SELECT 
+  company, 
+  role, 
+  location, 
+  team_size, 
+  impact_metric, 
+  primary_tool 
+FROM upendra_career_impact 
+ORDER BY period DESC;`,
+      },
+      {
+        id: "query-2",
+        filename: "query_2.sql",
+        title: "Technical Skills & Verified Production Context",
+        description: "Inventories key technical proficiencies and production application contexts.",
+        sql: `SELECT 
+  category, 
+  skill_name, 
+  proficiency_level, 
+  experience_years, 
+  verified_context 
+FROM upendra_technical_skills 
+ORDER BY category ASC, skill_name ASC;`,
+      },
+      {
+        id: "query-3",
+        filename: "query_3.sql",
+        title: "Production Analytics & AI Projects Portfolio",
+        description: "Queries delivered projects, status, organization, and primary technology stack.",
+        sql: `SELECT 
+  title, 
+  company, 
+  domain, 
+  status, 
+  primary_stack, 
+  impact 
+FROM upendra_projects 
+ORDER BY status ASC, company ASC;`,
+      },
+    ] as SqlSandboxQuery[],
+  },
 };

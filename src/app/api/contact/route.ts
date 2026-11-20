@@ -1,8 +1,54 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+// In-memory rate limiter: maximum 5 requests per 10 minutes per IP
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const ipSubmissionTracker = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = ipSubmissionTracker.get(ip);
+
+  // If no record exists or window expired, reset
+  if (!record || now > record.resetAt) {
+    ipSubmissionTracker.set(ip, {
+      count: 1,
+      resetAt: now + RATE_LIMIT_WINDOW_MS,
+    });
+    return true;
+  }
+
+  // If over limit, block
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+
+  record.count += 1;
+  return true;
+}
+
 export async function POST(request: Request) {
   try {
+    // 0. Rate limiting check
+    const forwardedHeader = request.headers.get("x-forwarded-for");
+    const clientIp =
+      (forwardedHeader ? forwardedHeader.split(",")[0].trim() : null) ||
+      request.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    if (!checkRateLimit(clientIp)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Too many submissions from this connection. Please wait a few minutes before trying again.",
+          code: "RATE_LIMITED",
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim() : "";
