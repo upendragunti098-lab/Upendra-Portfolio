@@ -28,6 +28,7 @@ export function Projects({ onSelectProject, onOpenSandbox }: ProjectsProps) {
 
   const companyFilters = [
     { label: "All Organizations", value: "All" },
+    { label: "Olist Logistics", value: "Olist" },
     { label: "Innodata", value: "Innodata" },
     { label: "Vodafone Idea", value: "Vodafone Idea" },
     { label: "Improve Business Solutions", value: "Improve Business Solutions" },

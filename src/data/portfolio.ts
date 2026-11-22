@@ -362,6 +362,35 @@ export const portfolioData = {
 
   projects: [
     {
+      id: "supply-chain-logistics-performance",
+      title: "Supply Chain & Logistics Performance Analytics",
+      company: "Olist Logistics (Independent Project)",
+      category: "Business Intelligence",
+      status: "Completed",
+      period: "2026",
+      shortDescription:
+        "End-to-end logistics analytics warehouse, Streamlit BI dashboard, and delivery delay classification model on 99,441 authentic e-commerce orders.",
+      description:
+        "End-to-end logistics analytics warehouse, Streamlit BI dashboard, and delivery delay classification model on 99,441 authentic e-commerce orders.",
+      problemStatement:
+        "Brazilian marketplace operations faced shipping unpredictability across continental distances, varying carrier transit times, seller fulfillment delays, and poor customer satisfaction from delivery SLA breaches.",
+      architecture:
+        "Normalized 9 relational CSV tables into a high-performance DuckDB columnar warehouse; engineered SLA tracking and latency metrics; developed 8 standalone analytical SQL models; trained a delay risk classification model (ROC-AUC 0.765); and deployed a 7-page interactive Streamlit dashboard alongside Power BI Star-Schema exports.",
+      deliverables: [
+        "7-page interactive Streamlit business intelligence dashboard with Plotly charts and dynamic state/date filtering.",
+        "High-performance DuckDB columnar analytical warehouse with 5 analytical views.",
+        "Star-Schema dimensional model and CSV exports for Power BI & Excel.",
+        "8 production standalone SQL scripts answering core logistics and operational questions.",
+        "Machine learning delay risk classifier with Scikit-Learn Random Forest (ROC-AUC 0.765).",
+        "Executive business insights report with operational diagnosis and data-backed recommendations.",
+      ],
+      tools: ["Python", "DuckDB", "SQL", "Streamlit", "Power BI", "Scikit-Learn"],
+      highlights:
+        "Analyzed 96,470 delivered orders; identified 8.11% late delivery rate; uncovered 13-day interstate transit penalty; quantified customer CSAT drop from 4.14 to 1.67 on late orders.",
+      impactMetric: "96,470 Delivered Orders · 8.11% Late Rate · ROC-AUC 0.765",
+      githubUrl: "https://github.com/upendragunti098-lab/supply-chain-logistics-analytics",
+    },
+    {
       id: "retail-demand-intelligence",
       title: "Retail Demand Intelligence & Inventory Optimization",
       company: "Vodafone Idea",
@@ -564,6 +593,15 @@ export const portfolioData = {
       ],
 
       upendra_projects: [
+        {
+          id: "supply-chain-logistics-performance",
+          title: "Supply Chain & Logistics Performance Analytics",
+          company: "Olist Logistics",
+          domain: "Supply Chain & BI",
+          status: "Completed",
+          primary_stack: "Python, DuckDB, SQL, Streamlit, Power BI",
+          impact: "Analyzed 96,470 orders; 8.11% delay rate; 13d regional transit gap; ROC-AUC 0.765",
+        },
         {
           id: "retail-demand-intelligence",
           title: "Retail Demand Intelligence & Inventory Optimization",
